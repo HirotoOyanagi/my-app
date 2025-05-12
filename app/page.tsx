@@ -233,7 +233,11 @@ export default function VioletLetter() {
 
           {/* Character Image */}
           <div className="my-4 relative w-full h-[300px]">
-            <div className="placeholder-image">アニメキャラクター画像のプレースホルダー</div>
+            <img 
+              src="/ChatGPT Image 2025年5月13日 02_07_30.png" 
+              alt="ヴァイオレット・エヴァーガーデン" 
+              className="w-full h-full object-contain rounded-md"
+            />
           </div>
 
           {/* Japanese Text */}
