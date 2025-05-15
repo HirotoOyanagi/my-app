@@ -1,8 +1,15 @@
 "use client"
 
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
+import VoiceInput from "./components/VoiceInput"
+import LetterEditor from "./components/LetterEditor"
 
-export default function VioletLetter() {
+export default function Home() {
+  const [currentStep, setCurrentStep] = useState<'input' | 'edit'>('input');
+  const [transcribedText, setTranscribedText] = useState('');
+  const [generatedLetter, setGeneratedLetter] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   // フォントを動的に読み込む
   useEffect(() => {
     const link = document.createElement("link")
@@ -14,6 +21,41 @@ export default function VioletLetter() {
       document.head.removeChild(link)
     }
   }, [])
+
+  const handleTranscriptionComplete = async (text: string) => {
+    setTranscribedText(text);
+    setIsLoading(true);
+    
+    try {
+      // 手紙生成APIを呼び出す
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setGeneratedLetter(data.letter);
+        setCurrentStep('edit');
+      } else {
+        console.error('手紙生成エラー:', data.error);
+        alert('手紙の生成に失敗しました。');
+      }
+    } catch (error) {
+      console.error('API呼び出しエラー:', error);
+      alert('サーバーとの通信に失敗しました。');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBackToInput = () => {
+    setCurrentStep('input');
+  };
 
   return (
     <>
@@ -240,29 +282,33 @@ export default function VioletLetter() {
             />
           </div>
 
-          {/* Japanese Text */}
-          <p className="text-2xl text-[#2d1f0e] font-medium my-6 text-center">お話をどうぞ、手紙にいたします</p>
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center my-6">
+              <p className="text-2xl text-[#2d1f0e] font-medium text-center">手紙を作成中...</p>
+              <div className="mt-4 w-16 h-16 border-t-4 border-[#2d1f0e] border-solid rounded-full animate-spin"></div>
+            </div>
+          ) : currentStep === 'input' ? (
+            <>
+              {/* Japanese Text */}
+              <p className="text-2xl text-[#2d1f0e] font-medium my-6 text-center">お話をどうぞ、手紙にいたします</p>
 
-          {/* Voice Input Button */}
-          <button className="button" onClick={() => alert("音声入力が開始されました")}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-6 w-6 text-[#2d1f0e]"
-            >
-              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-              <line x1="12" x2="12" y1="19" y2="22"></line>
-            </svg>
-            <span>音声入力をはじめる</span>
-          </button>
+              {/* Voice Input Component */}
+              <VoiceInput onTranscriptionComplete={handleTranscriptionComplete} />
+            </>
+          ) : (
+            <>
+              {/* Letter Editor Component */}
+              <LetterEditor initialText={generatedLetter} />
+              
+              {/* Back Button */}
+              <button
+                className="button mt-4"
+                onClick={handleBackToInput}
+              >
+                新しい手紙を作成する
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>
