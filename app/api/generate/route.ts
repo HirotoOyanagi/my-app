@@ -8,7 +8,7 @@ const openai = new OpenAI({
 
 export async function POST(req: NextRequest) {
   try {
-    const { text } = await req.json();
+    const { text, sender, recipient } = await req.json();
     
     if (!text) {
       return NextResponse.json(
@@ -28,7 +28,9 @@ export async function POST(req: NextRequest) {
           - 関係性によって、丁寧な言葉使いや、少し砕けた言葉遣い、様々な言葉遣いを使い分ける
           - 感情を豊かに表現
           - 読みやすく、温かみのある文体
-          - 相手への思いやりを感じさせる表現を使用`
+          - 相手への思いやりを感じさせる表現を使用
+          - 宛名は「${recipient}」、送り主は「${sender}」として手紙を作成してください
+          - 手紙の最後には必ず送り主の名前を入れてください`
         },
         {
           role: 'user',
