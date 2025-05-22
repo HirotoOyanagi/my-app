@@ -9,6 +9,8 @@ export default function Home() {
   const [transcribedText, setTranscribedText] = useState('');
   const [generatedLetter, setGeneratedLetter] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sender, setSender] = useState('');
+  const [recipient, setRecipient] = useState('');
 
   // フォントを動的に読み込む
   useEffect(() => {
@@ -33,7 +35,11 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ 
+          text,
+          sender,
+          recipient
+        }),
       });
       
       const data = await response.json();
@@ -291,6 +297,32 @@ export default function Home() {
             <>
               {/* Japanese Text */}
               <p className="text-2xl text-[#2d1f0e] font-medium my-6 text-center">お話をどうぞ、手紙にいたします</p>
+
+              {/* 宛名と送り主の入力フィールド */}
+              <div className="w-full mb-6">
+                <div className="mb-4">
+                  <label htmlFor="recipient" className="block text-[#2d1f0e] mb-2">宛名</label>
+                  <input
+                    type="text"
+                    id="recipient"
+                    value={recipient}
+                    onChange={(e) => setRecipient(e.target.value)}
+                    className="w-full p-2 border-2 border-[#2d1f0e] rounded-md bg-transparent"
+                    placeholder="例：山田花子様"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="sender" className="block text-[#2d1f0e] mb-2">送り主</label>
+                  <input
+                    type="text"
+                    id="sender"
+                    value={sender}
+                    onChange={(e) => setSender(e.target.value)}
+                    className="w-full p-2 border-2 border-[#2d1f0e] rounded-md bg-transparent"
+                    placeholder="例：佐藤太郎"
+                  />
+                </div>
+              </div>
 
               {/* Voice Input Component */}
               <VoiceInput onTranscriptionComplete={handleTranscriptionComplete} />
