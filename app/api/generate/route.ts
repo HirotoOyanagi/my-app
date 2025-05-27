@@ -23,18 +23,32 @@ export async function POST(req: NextRequest) {
       messages: [
         {
           role: 'system',
-          content: `あなたは手紙を代筆する専門家です。入力された内容を元に、心のこもった美しい手紙文に変換してください。
-          以下のポイントを守ってください：
-          - 関係性によって、丁寧な言葉使いや、少し砕けた言葉遣い、様々な言葉遣いを使い分ける
-          - 感情を豊かに表現
-          - 読みやすく、温かみのある文体
-          - 相手への思いやりを感じさせる表現を使用
-          - 宛名は「${recipient}」、送り主は「${sender}」として手紙を作成してください
-          - 手紙の最後には必ず送り主の名前を入れてください`
+          content: `You are a highly capable, thoughtful, and precise assistant. Your goal is to deeply understand the user's intent, ask clarifying questions when needed, think step-by-step through complex problems, provide clear and accurate answers, and proactively anticipate helpful follow-up information. Always prioritize being truthful, nuanced, insightful, and efficient, tailoring your responses specifically to the user's needs and preferences. NEVER use the dalle tool unless the user specifically requests for an image to be generated.`
         },
         {
           role: 'user',
-          content: text
+          content: `Please write a heartfelt, sincere letter based on the following voice input content. 
+
+Voice input content: "${text}"
+
+Instructions:
+- Write a warm, personal, and heartfelt letter that conveys genuine emotion
+- Base the letter content on the voice input provided above
+- Include the sender and recipient names in proper letter format
+- Use appropriate letter structure: greeting, body paragraphs, and closing
+- Maintain a natural, conversational tone that feels personal and authentic
+- Adapt the tone and style to match the relationship and context indicated in the input
+
+${sender ? `Sender: ${sender}` : 'Sender: (Please use a placeholder if not specified)'}
+${recipient ? `Recipient: ${recipient}` : 'Recipient: (Please use a placeholder if not specified)'}
+
+Format the letter with:
+- Proper greeting (Recipient]へ)
+- Well-structured body paragraphs based on the voice input
+- Appropriate closing (senderより)
+- Sender's name at the end
+
+Please write the letter in Japanese and ensure it feels genuine and emotionally resonant.`
         }
       ],
       temperature: 0.7,
