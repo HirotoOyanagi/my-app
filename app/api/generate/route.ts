@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     // OpenAI API 4.5を使用して手紙文を生成
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-4.1',
       messages: [
         {
           role: 'system',

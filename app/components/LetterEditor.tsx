@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import html2canvas from 'html2canvas';
 
 interface LetterEditorProps {
   initialText: string;
@@ -10,6 +11,8 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
   const [letterText, setLetterText] = useState(initialText);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [isSavingPhoto, setIsSavingPhoto] = useState(false);
+  const letterDisplayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLetterText(initialText);
@@ -87,6 +90,64 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
     }
   };
 
+  const saveAsPhoto = async () => {
+    if (!letterDisplayRef.current) {
+      alert('手紙の表示領域が見つかりません。');
+      return;
+    }
+
+    setIsSavingPhoto(true);
+    
+    try {
+      // ブラウザ互換性チェック
+      if (!window.HTMLCanvasElement) {
+        throw new Error('このブラウザは画像保存機能をサポートしていません。');
+      }
+
+      // HTML2Canvasでキャプチャ
+      const canvas = await html2canvas(letterDisplayRef.current, {
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: '#f8e8c8', // 手紙の背景色
+        width: letterDisplayRef.current.scrollWidth,
+        height: letterDisplayRef.current.scrollHeight,
+        scrollX: 0,
+        scrollY: 0,
+        x: 0,
+        y: 0,
+      } as any);
+
+      // Blobに変換
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            throw new Error('画像の生成に失敗しました。');
+          }
+
+          // ダウンロード処理
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `letter_${new Date().toISOString().slice(0, 10)}.png`;
+          document.body.appendChild(a);
+          a.click();
+          
+          // クリーンアップ
+          URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        },
+        'image/png',
+        1.0 // 高品質
+      );
+    } catch (error) {
+      console.error('写真保存エラー:', error);
+      const errorMessage = error instanceof Error ? error.message : '手紙の写真保存に失敗しました。';
+      alert(errorMessage);
+    } finally {
+      setIsSavingPhoto(false);
+    }
+  };
+
   const sendEmail = async () => {
     // メール送信機能の実装
     alert('メール送信機能は現在実装中です。');
@@ -96,11 +157,26 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
     <div className="w-full max-w-md">
       <h2 className="text-2xl text-[#2d1f0e] font-medium mb-4 text-center">手紙の編集</h2>
       
+      {/* 手紙表示領域（写真保存用） */}
+      <div 
+        ref={letterDisplayRef}
+        className="letter-display mb-4 p-6 border-2 border-[#2d1f0e] rounded-md bg-[#f8e8c8] shadow-lg"
+        style={{ 
+          fontFamily: 'serif',
+          lineHeight: '1.8',
+          letterSpacing: '0.05em'
+        }}
+      >
+        <div className="text-[#2d1f0e] whitespace-pre-wrap">
+          {letterText || 'ここに手紙の内容が表示されます...'}
+        </div>
+      </div>
+      
       <textarea
         className="w-full h-80 p-4 border-2 border-[#2d1f0e] rounded-md bg-[#f8e8c8] text-[#2d1f0e] font-serif"
         value={letterText}
         onChange={handleTextChange}
-        placeholder="ここに手紙の内容が表示されます..."
+        placeholder="ここに手紙の内容を編集できます..."
       />
       
       <div className="flex flex-col gap-3 mt-4">
@@ -112,7 +188,7 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
           {isGenerating ? '生成中...' : '手紙を再生成する'}
         </button>
         
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <button
             className="button flex-1"
             onClick={() => exportLetter('text')}
@@ -127,6 +203,16 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
             disabled={isExporting}
           >
             PDF保存
+          </button>
+        </div>
+        
+        <div className="flex gap-2">
+          <button
+            className="button flex-1"
+            onClick={saveAsPhoto}
+            disabled={isSavingPhoto}
+          >
+            {isSavingPhoto ? '保存中...' : '写真で保存'}
           </button>
           
           <button
