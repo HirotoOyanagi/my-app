@@ -1,36 +1,11 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 想いを伝える音声アプリ
 
-## Getting Started
+## 制作背景
 
-First, run the development server:
+現代社会では、自分の気持ちを素直に他者に伝える機会が少なくなってきていると感じています。かつては手紙という形で、感謝や想いを丁寧に伝える文化がありました。しかし現在では、そのような手紙を書く習慣も次第に失われつつあります。
+その背景には、日々の忙しさや、気持ちを言葉にすることへの照れくささといった心理的なハードルがあると考えられます。結果として、多くの人が本心を伝えることを後回しにし、大切な想いが言葉にならないまま過ぎ去ってしまうことが増えています。
+こうした現状に対して、もう一度「想いを言葉にして届ける」という文化を取り戻したいという思いから、本アプリの開発に至りました。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## アプリの目的と設計思想
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+本アプリの目的は、ユーザーが自分の気持ちを誰かに対して素直に伝えるきっかけをつくることにあります。文章による入力ではなく音声入力のみという設計にしたのは、できるだけ自然体で、かつ自分の言葉で語ることに集中してもらうためです。テキストよりも音声のほうが感情が伝わりやすく、「伝える」という行為そのものに真剣に向き合ってもらえると考えました。
