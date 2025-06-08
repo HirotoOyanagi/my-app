@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📮 想いを届ける手紙アプリ 
 
-## Getting Started
+---
 
-First, run the development server:
+## 🔖 制作背景と課題意識
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+現代ではSNSやメッセージアプリが普及し、日常的なコミュニケーションは増加しています。しかしその反面、「感謝の気持ち」や「素直な思い」といった深い感情を、特に1対1の関係で丁寧に伝える機会が減少していると感じています。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 恥ずかしさや照れくささ  
+- 忙しさからくる機会の喪失  
+- 言葉にする難しさ  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+これらの要因で、自分の素直な気持ちが相手に伝わらないまま終わってしまうことが多く、これは非常にもったいないことです。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+人間の本音や思いやりは、時として他者に感動を与え、勇気をもたらし、生きる喜びに繋がります。  
+そこで私は、この課題をテクノロジーで解決すべく、「**音声入力で想いを代筆する手紙アプリ**」を開発しました。
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🎯 アプリの目的
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+本アプリの目的は、人々がもっと手軽に自分の素直な気持ちを大切な相手へ伝えられる社会を作ることです。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+音声入力を活用し、自分自身の言葉をベースに、自然な表現で感情を伝える手紙を生成することで、**素直な気持ちを伝えることができる文化**を築きたいと考えています。
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠 技術選定とその理由
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🌐 gpt-4o(手紙の作成)
+
+- **選定理由**：感情表現能力が高く、人間らしい共感的な文章生成に優れているためです。 
+過去にOpenAIのモデルを活用して、手紙の作成を作成したことがあるのですが、その時の手紙の文章が感動的で泣いた経験があります。
+その経験から、 手紙の作成に十分に耐えうるモデルだと感じ、OpenAIのAPIを活用しました。
+- **活用方法**：ユーザーの音声内容に基づいて、ユーザーの伝えたい気持ちをもとに、自然な手紙の文章を生成しします。
+
+### 🎙 OpenAI Whisper API（音声認識）
+
+- **選定理由**：高精度な音声文字起こしが可能で、多言語にも対応しているためです。  
+
+- **活用方法**：ユーザーの音声入力をリアルタイムでテキスト化し、その内容をに渡すことで、音声から手紙を自動生成します。
+
+### 🖼 HTML2Canvas（手紙の画像化）
+
+- **選定理由**：デジタル上で作成した手紙を視覚的に美しく保存・共有できるためです。  
+- **活用方法**：手紙のフォントやレイアウトをそのまま画像化し、ユーザーが手軽に手紙を保存できるようにしています。
+
+### 🚀 Next.js / TypeScript / Vercel（開発・デプロイ環境）
+
+- **Next.js × Vercel**：開発とデプロイをスピーディかつ円滑に進めることができるため採用いたしました。  
+- **TypeScript**：型安全性を活かし、AIとの連携においてデータの一貫性やエラーの削減に寄与するため使用しています。
+
+
+## 🚩 最後に
+
+本プロジェクトを通じて、人と人との「素直な想い」を届ける喜びを再発見し、感情豊かなコミュニケーションが日常に根付く社会の実現に貢献したいと考えております。
