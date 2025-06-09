@@ -9,7 +9,6 @@ interface LetterEditorProps {
 
 export default function LetterEditor({ initialText }: LetterEditorProps) {
   const [letterText, setLetterText] = useState(initialText);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [isSavingPhoto, setIsSavingPhoto] = useState(false);
   const letterDisplayRef = useRef<HTMLDivElement>(null);
@@ -20,34 +19,6 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setLetterText(e.target.value);
-  };
-
-  const regenerateLetter = async () => {
-    setIsGenerating(true);
-    
-    try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: letterText }),
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        setLetterText(data.letter);
-      } else {
-        console.error('手紙生成エラー:', data.error);
-        alert('手紙の生成に失敗しました。');
-      }
-    } catch (error) {
-      console.error('API呼び出しエラー:', error);
-      alert('サーバーとの通信に失敗しました。');
-    } finally {
-      setIsGenerating(false);
-    }
   };
 
   const exportLetter = async (format: 'text') => {
@@ -175,14 +146,6 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
       />
       
       <div className="flex flex-col gap-3 mt-4">
-        <button
-          className="button"
-          onClick={regenerateLetter}
-          disabled={isGenerating}
-        >
-          {isGenerating ? '生成中...' : '手紙を再生成する'}
-        </button>
-        
         <div className="flex gap-2">
           <button
             className="button flex-1"
