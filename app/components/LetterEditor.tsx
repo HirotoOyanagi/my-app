@@ -50,7 +50,7 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
     }
   };
 
-  const exportLetter = async (format: 'text' | 'pdf') => {
+  const exportLetter = async (format: 'text') => {
     setIsExporting(true);
     
     try {
@@ -148,11 +148,6 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
     }
   };
 
-  const sendEmail = async () => {
-    // メール送信機能の実装
-    alert('メール送信機能は現在実装中です。');
-  };
-
   return (
     <div className="w-full max-w-md">
       <h2 className="text-2xl text-[#2d1f0e] font-medium mb-4 text-center">手紙の編集</h2>
@@ -196,14 +191,6 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
           >
             テキスト保存
           </button>
-          
-          <button
-            className="button flex-1"
-            onClick={() => exportLetter('pdf')}
-            disabled={isExporting}
-          >
-            PDF保存
-          </button>
         </div>
         
         <div className="flex gap-2">
@@ -213,14 +200,6 @@ export default function LetterEditor({ initialText }: LetterEditorProps) {
             disabled={isSavingPhoto}
           >
             {isSavingPhoto ? '保存中...' : '写真で保存'}
-          </button>
-          
-          <button
-            className="button flex-1"
-            onClick={sendEmail}
-            disabled={isExporting}
-          >
-            メール送信
           </button>
         </div>
       </div>
